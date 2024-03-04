@@ -39,7 +39,7 @@ class FourierBlock(nn.Module):
 
         self.scale = (1 / (in_channels * out_channels))
         self.weights1 = nn.Parameter(
-            self.scale * torch.rand(8, in_channels // 8, out_channels // 8, len(self.index), dtype=torch.float))
+            self.scale * torch.rand(8, in_channels // 8, out_channels // 8, len(self.index), dtype=torch.float)) # 8 euqals to the default num_heads
         self.weights2 = nn.Parameter(
             self.scale * torch.rand(8, in_channels // 8, out_channels // 8, len(self.index), dtype=torch.float))
 
@@ -64,9 +64,9 @@ class FourierBlock(nn.Module):
         B, L, H, E = q.shape
         x = q.permute(0, 2, 3, 1)
         # Compute Fourier coefficients
-        x_ft = torch.fft.rfft(x, dim=-1)
+        x_ft = torch.fft.rfft(x, dim=-1) # B, H, E, L//2+1
         # Perform Fourier neural operations
-        out_ft = torch.zeros(B, H, E, L // 2 + 1, device=x.device, dtype=torch.cfloat)
+        out_ft = torch.zeros(B, H, E, L // 2 + 1, device=x.device, dtype=torch.cfloat) # cfloat = 64-bit complex
         for wi, i in enumerate(self.index):
             if i >= x_ft.shape[3] or wi >= out_ft.shape[3]:
                 continue
