@@ -66,7 +66,7 @@ class AutoCorrelation(nn.Module):
         # update corr
         tmp_corr = torch.softmax(weights, dim=-1)
         # aggregation
-        tmp_values = values.repeat(1, 1, 1, 2)
+        tmp_values = values.repeat(1, 1, 1, 2) # double the length of the last dimension
         delays_agg = torch.zeros_like(values).float()
         for i in range(top_k):
             tmp_delay = init_index + delay[:, i].unsqueeze(1).unsqueeze(1).unsqueeze(1).repeat(1, head, channel, length)
@@ -83,7 +83,7 @@ class AutoCorrelation(nn.Module):
         head = values.shape[1]
         channel = values.shape[2]
         length = values.shape[3]
-        # index init
+        # index init, every position of a time series has a unique index
         init_index = torch.arange(length).unsqueeze(0).unsqueeze(0).unsqueeze(0).repeat(batch, head, channel, 1).cuda()
         # find top k
         top_k = int(self.factor * math.log(length))
@@ -113,7 +113,7 @@ class AutoCorrelation(nn.Module):
         # period-based dependencies
         q_fft = torch.fft.rfft(queries.permute(0, 2, 3, 1).contiguous(), dim=-1)
         k_fft = torch.fft.rfft(keys.permute(0, 2, 3, 1).contiguous(), dim=-1)
-        res = q_fft * torch.conj(k_fft)
+        res = q_fft * torch.conj(k_fft) # auto-correlation in frequency domain, compute based on Winener-Khinchin theorem
         corr = torch.fft.irfft(res, dim=-1)
 
         # time delay agg
