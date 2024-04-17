@@ -111,7 +111,7 @@ class AutoCorrelation(nn.Module):
             keys = keys[:, :L, :, :]
 
         # period-based dependencies
-        q_fft = torch.fft.rfft(queries.permute(0, 2, 3, 1).contiguous(), dim=-1)
+        q_fft = torch.fft.rfft(queries.permute(0, 2, 3, 1).contiguous(), dim=-1)  # [B,H,E,L']
         k_fft = torch.fft.rfft(keys.permute(0, 2, 3, 1).contiguous(), dim=-1)
         res = q_fft * torch.conj(k_fft) # auto-correlation in frequency domain, compute based on Winener-Khinchin theorem
         corr = torch.fft.irfft(res, dim=-1)

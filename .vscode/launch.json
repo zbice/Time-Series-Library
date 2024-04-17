@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Autoformer",
+            "name": "Autoformer",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "program": "run.py",
             "console": "integratedTerminal",
             "args": [
                 "--task_name", "long_term_forecast",
@@ -35,10 +35,10 @@
             ]
         },
         {
-            "name": "Python Debugger: Crossformer",
+            "name": "Crossformer",
             "type": "debugpy",
             "request": "launch",
-            "program": "${file}",
+            "program": "run.py",
             "console": "integratedTerminal",
             "args": [
                 "--task_name", "long_term_forecast",
@@ -68,7 +68,7 @@
             ]
         },
         {
-            "name": "Python Debugger: PatchTST",
+            "name": "PatchTST",
             "type": "debugpy",
             "request": "launch",
             "program": "${file}",
